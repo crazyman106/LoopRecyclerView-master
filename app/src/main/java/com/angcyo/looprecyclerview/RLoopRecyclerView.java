@@ -82,7 +82,7 @@ public class RLoopRecyclerView extends RecyclerView {
         @Override
         final public void onBindViewHolder(T holder, int position) {
 //            onBindLoopViewHolder(holder, position % getItemRawCount());
-            onBindLoopViewHolder(holder, position);
+            onBindLoopViewHolder(holder, position );
         }
 
         public abstract void onBindLoopViewHolder(T holder, int position);

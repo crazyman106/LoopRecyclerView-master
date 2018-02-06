@@ -10,7 +10,7 @@
         android:layout_alignParentBottom="true"
         android:gravity="center|bottom"
         android:singleLine="true"
-        android:text="哈哈"
+        android:text="哈哈fd"
         android:textColor="#333333" />
 
     <ImageView
@@ -18,9 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/txt"
-        android:background="@mipmap/ic_launcher"
-        android:gravity="center"
-        android:textSize="20sp" />
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 
     <ImageView
         android:id="@+id/item_bg"

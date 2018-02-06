@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -35,14 +36,15 @@ public class MainActivity extends AppCompatActivity implements ScalableCardHelpe
         return (int) (dipValue * density + 0.5f);
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RLoopRecyclerView loopRecyclerView = (RLoopRecyclerView) findViewById(R.id.recycler_view);
-        loopRecyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-
+        final RLoopRecyclerView loopRecyclerView = (RLoopRecyclerView) findViewById(R.id.recycler_view);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        loopRecyclerView.setLayoutManager(linearLayoutManager);
 
         for (int i = 0; i < 6; i++) {
             datas.add("" + i);
@@ -53,6 +55,22 @@ public class MainActivity extends AppCompatActivity implements ScalableCardHelpe
         loopRecyclerView.setAdapter(myAdapter);
         ScalableCardHelper cardHelper = new ScalableCardHelper(this);
         cardHelper.attachToRecyclerView(loopRecyclerView);
+        cardHelper.setOnClickListener(new ScalableCardHelper.OnClickListener() {
+            @Override
+            public void onClick(int position, final int offset) {
+                Toast.makeText(MainActivity.this, position % 6 + "", Toast.LENGTH_LONG).show();
+                if (loopRecyclerView.getScrollState() == 0) {
+                    loopRecyclerView.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            loopRecyclerView.scrollBy(getWidth() / 5 * offset, 0);
+                            loopRecyclerView.invalidate();
+                            // TODO: 2018/2/6 0006 进行跳转事件
+                        }
+                    }, 50);
+                }
+            }
+        });
     }
 
     private int getWidth() {
@@ -64,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements ScalableCardHelpe
 
     @Override
     public void onPageSelected(int position) {
+
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
@@ -90,42 +109,41 @@ public class MainActivity extends AppCompatActivity implements ScalableCardHelpe
             RelativeLayout.LayoutParams txtLayoutParams = (RelativeLayout.LayoutParams) txt.getLayoutParams();
             txtLayoutParams.width = getWidth() / 5;
             txt.setLayoutParams(txtLayoutParams);
-            RelativeLayout.LayoutParams imgLayoutParams = (RelativeLayout.LayoutParams) img.getLayoutParams();
-            imgLayoutParams.width = getWidth() / 5;
-            imgLayoutParams.height = getWidth() / 5;
-            img.setLayoutParams(imgLayoutParams);
-
+//            RelativeLayout.LayoutParams imgLayoutParams = (RelativeLayout.LayoutParams) img.getLayoutParams();
+//            imgLayoutParams.width = getWidth() / 5;
+//            imgLayoutParams.height = getWidth() / 5;
+//            img.setLayoutParams(imgLayoutParams);
             RecyclerView.LayoutParams layoutParams = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             layoutParams.height = getWidth() / 5 + dp2px(20);
             holder.itemView.setLayoutParams(layoutParams);
 
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Log.e("MainActivity", position + "");
-                }
-            });
-
-
+//            holder.itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.e("MainActivity", position + "");
+//
+//                }
+//            });
             switch (position % 6) {
-                case 1:
+                case 0:
                     img.setImageResource(R.mipmap.a1);
                     break;
-                case 2:
+                case 1:
                     img.setImageResource(R.mipmap.a2);
                     break;
-                case 3:
+                case 2:
                     img.setImageResource(R.mipmap.a3);
                     break;
-                case 4:
+                case 3:
                     img.setImageResource(R.mipmap.a4);
                     break;
-                case 5:
+                case 4:
                     img.setImageResource(R.mipmap.a5);
                     break;
-                case 6:
+                case 5:
                     img.setImageResource(R.mipmap.a6);
                     break;
+                default:
             }
 
             ImageView imgBg = (ImageView) holder.itemView.findViewById(R.id.item_bg);
